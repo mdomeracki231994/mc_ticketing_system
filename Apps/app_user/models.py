@@ -16,7 +16,6 @@ class AppUserManager(BaseUserManager):
             is_active=False,
             is_staff=False,
             is_site_owner=False,
-            org=None,
     ):
         if not email:
             raise ValueError("An Email is required")
@@ -30,7 +29,6 @@ class AppUserManager(BaseUserManager):
             is_active=is_active,
             is_staff=is_staff,
             is_site_owner=is_site_owner,
-            org=org,
         )
         user.set_password(password)
         user.save()

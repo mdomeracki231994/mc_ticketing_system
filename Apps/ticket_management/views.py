@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -8,18 +7,17 @@ from Apps.org_management.models import Organization
 from Apps.ticket_management.models import Ticket
 
 
+@login_required(login_url='/accounts/login/')
 def home(request):
-    if request.user.is_authenticated:
-        tickets = Ticket.objects.filter(
-            Q(created_by=request.user) | Q(assigned_to=request.user),
-            mark_deleted=False
-        )
-        context = {
-            'tickets': tickets,
-        }
-        return render(request, 'ticket_management/index.html', context)
-    else:
-        return redirect('login')
+    tickets = Ticket.objects.filter(
+        mark_deleted=False
+    )
+    total_ticket_count = tickets.count()
+    context = {
+        'tickets': tickets,
+        'total_ticket_count': total_ticket_count,
+    }
+    return render(request, 'ticket_management/index.html', context)
 
 
 @login_required
@@ -59,6 +57,19 @@ def create_ticket(request):
 
 
 @login_required
+def view_my_tickets(request):
+    tickets = Ticket.objects.filter(
+        assigned_to=request.user
+    )
+    total_ticket_count = tickets.count()
+    context = {
+        'tickets': tickets,
+        'total_ticket_count': total_ticket_count,
+    }
+    return render(request, 'ticket_management/my_tickets.html', context)
+
+
+@login_required
 def update_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
@@ -73,8 +84,33 @@ def update_ticket(request, ticket_id):
 
 
 @login_required
+def mark_ticket_closed(request, ticket_id):
+    pass
+
+
+@login_required
 def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
     ticket.mark_deleted = not ticket.mark_deleted
     ticket.save()
     return JsonResponse({'success': True})
+
+@login_required
+def recover_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    ticket.mark_deleted = False
+    ticket.save()
+    return JsonResponse({'success': True})
+
+
+@login_required
+def all_deleted_tickets(request):
+    tickets = Ticket.objects.filter(
+        mark_deleted=True
+    )
+    total_ticket_count = tickets.count()
+    context = {
+        'tickets': tickets,
+        'total_ticket_count': total_ticket_count,
+    }
+    return render(request, 'ticket_management/all_deleted.html', context)
