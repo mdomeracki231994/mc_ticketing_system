@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'Apps.app_user',
     'Apps.ticket_management',
+    'Apps.org_management',
 ]
 
 MIDDLEWARE = [
@@ -122,6 +123,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
 
 COMPRESS_ROOT = BASE_DIR / 'static'
 

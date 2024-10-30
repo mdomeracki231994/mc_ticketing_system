@@ -3,6 +3,9 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from Apps.org_management.models import Organization
+
+
 class AppUserManager(BaseUserManager):
     def create_user(
             self,
@@ -11,6 +14,9 @@ class AppUserManager(BaseUserManager):
             first_name=None,
             last_name=None,
             is_active=False,
+            is_staff=False,
+            is_site_owner=False,
+            org=None,
     ):
         if not email:
             raise ValueError("An Email is required")
@@ -22,6 +28,9 @@ class AppUserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             is_active=is_active,
+            is_staff=is_staff,
+            is_site_owner=is_site_owner,
+            org=org,
         )
         user.set_password(password)
         user.save()
@@ -46,8 +55,11 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     phone_number = models.CharField(max_length=55, null=True, blank=True)
+    is_site_owner = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
