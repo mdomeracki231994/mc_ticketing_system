@@ -7,7 +7,8 @@
                 <div class="px-4 mx-auto max-w-screen-2xl lg:px-12">
                     <div class="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
                         <div class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3 p-2">
-                            <h1 class="text-center text-white text-1xl">Current Deleted Tickets: {{ total_ticket_count }} </h1>
+                            <h1 class="text-center text-white text-1xl">Current Deleted
+                                Tickets: {{ total_ticket_count }} </h1>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -79,14 +80,14 @@
                                         <td class="px-4 py-3">{{ ticket.created_at|date:"F j, Y, g:i a" }}</td>
                                         <td class="px-4 py-3">{{ ticket.updated_at|date:"F j, Y, g:i a" }}</td>
                                         <td>
-                                            <button class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                                                <a href="{% url 'recover_ticket' ticket.id %}">Recover Ticket</a>
+                                            <button onclick="recoverTicket({{ ticket.id }})" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                                                Recover Ticket
                                             </button>
                                         </td>
                                         <td>
-                                            <button onclick="recoverTicket({{ ticket.id }})"
+                                            <button onclick="permanentlyDelete({{ ticket.id }})"
                                                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
-                                                Delete
+                                                Permanently Delete
                                             </button>
                                         </td>
                                     </tr>
@@ -102,7 +103,6 @@
 
     <script>
         function recoverTicket(ticketId) {
-            console.log("JavaScript Worked");
             fetch(`/recover/${ticketId}/`, {
                 method: 'PUT',
                 headers: {
@@ -119,6 +119,25 @@
                         alert('Failed Recover Ticket.');
                     }
                 });
+        }
+
+        function permanentlyDelete(ticketId) {
+            fetch(`/permanently_delete/${ticketId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed Recover Ticket.');
+                    }
+                });
+
         }
     </script>
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -96,13 +97,33 @@ def delete_ticket(request, ticket_id):
     return JsonResponse({'success': True})
 
 @login_required
+def permanently_delete_ticket(request: WSGIRequest, ticket_id: int):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    ticket.delete()
+    return JsonResponse({'success': True})
+
+@login_required
 def recover_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
     ticket.mark_deleted = False
     ticket.save()
     return JsonResponse({'success': True})
 
+# @login_required
+# def re_open_ticket(request, ticket_id):
+#     ticket = get_object_or_404(Ticket, id=ticket_id) FIXME Need to figure out how this will work.
+#     ticket.completed_at = None
 
+
+@login_required
+def all_closed_tickets(request: WSGIRequest):
+    tickets = Ticket.objects.filter(completed_at__isnull=False)
+    total_ticket_count = tickets.count()
+    context = {
+        'tickets': tickets,
+        'total_ticket_count': total_ticket_count,
+    }
+    return render(request, 'ticket_management/closed_tickets.html', context)
 @login_required
 def all_deleted_tickets(request):
     tickets = Ticket.objects.filter(
