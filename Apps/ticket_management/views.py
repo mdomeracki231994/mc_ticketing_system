@@ -81,8 +81,16 @@ def update_ticket(request, ticket_id):
         ticket.save()
         return redirect('home')
 
-    return render(request, 'ticket_management/ticket_details.html', {'ticket': ticket})
+    return render(request, 'ticket_management/update_ticket.html', {'ticket': ticket})
 
+
+@login_required
+def ticket_details(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    context = {
+        'ticket': ticket,
+    }
+    return render(request, 'ticket_management/ticket_details.html', context)
 
 @login_required
 def mark_ticket_closed(request, ticket_id):

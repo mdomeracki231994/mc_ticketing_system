@@ -899,6 +899,10 @@ video {
   cursor: pointer;
 }
 
+.cursor-grab {
+  cursor: grab;
+}
+
 .list-none {
   list-style-type: none;
 }
@@ -1418,6 +1422,10 @@ video {
 
 .duration-75 {
   transition-duration: 75ms;
+}
+
+.hover\:cursor-grabbing:hover {
+  cursor: grabbing;
 }
 
 .hover\:bg-gray-100:hover {
