@@ -1,17 +1,19 @@
+
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.utils import timezone
 from Apps.app_user.models import AppUser
 from Apps.org_management.models import Organization
-from Apps.ticket_management.models import Ticket
+from Apps.ticket_management.models import Ticket, TicketComment
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='login')
 def home(request):
     tickets = Ticket.objects.filter(
-        mark_deleted=False
+        mark_deleted=False,
+        org=request.user.org_id,
     )
     total_ticket_count = tickets.count()
     context = {
@@ -31,6 +33,8 @@ def create_ticket(request):
         created_by = request.user
         assigned_user_id = request.POST['assigned_user']
         assigned_to = get_object_or_404(AppUser, pk=assigned_user_id)
+        users_org_id = request.user.org_id
+        org = Organization.objects.get(id=users_org_id)
 
         new_ticket = Ticket.objects.create(
             title=title,
@@ -38,7 +42,8 @@ def create_ticket(request):
             status=status,
             priority=priority,
             created_by=created_by,
-            assigned_to=assigned_to
+            assigned_to=assigned_to,
+            org=org,
         )
         new_ticket.save()
         return redirect('home')
@@ -96,6 +101,27 @@ def ticket_details(request, ticket_id):
 def mark_ticket_closed(request, ticket_id):
     pass
 
+
+@login_required()
+def add_comment(request, ticket_id):
+    error_message = ""
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    if request.method == 'POST':
+        comment_text = request.POST['comment_text']
+        if comment_text:
+            TicketComment.objects.create(
+                ticket=ticket,
+                comment=comment_text,
+                created_at=timezone.now(),
+            )
+            return redirect('ticket_details', ticket_id)
+        else:
+            error_message = "Comment cannot be empty."
+
+    return render(request, 'ticket_management/ticket_details.html', {
+        'ticket': ticket,
+        'error_message': error_message if 'error_message' in locals() else None
+    })
 
 @login_required
 def delete_ticket(request, ticket_id):

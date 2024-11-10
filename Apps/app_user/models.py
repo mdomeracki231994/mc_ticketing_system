@@ -16,12 +16,14 @@ class AppUserManager(BaseUserManager):
             is_active=False,
             is_staff=False,
             is_site_owner=False,
+            org_id = None,
     ):
         if not email:
             raise ValueError("An Email is required")
         if not password:
             raise ValueError("A Password is required")
         email = self.normalize_email(email)
+
         user = self.model(
             email=email,
             first_name=first_name,
@@ -29,6 +31,7 @@ class AppUserManager(BaseUserManager):
             is_active=is_active,
             is_staff=is_staff,
             is_site_owner=is_site_owner,
+            org_id=org_id,
         )
         user.set_password(password)
         user.save()

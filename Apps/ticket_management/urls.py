@@ -15,4 +15,5 @@ urlpatterns = [
     path('recover/<int:ticket_id>/', views.recover_ticket, name='recover_ticket'),
     path('all_deleted_tickets/', views.all_deleted_tickets, name='all_deleted_tickets'),
     path('all_closed_tickets/', views.all_closed_tickets, name='all_closed_tickets'),
+    path('add_comment/<int:ticket_id>/', views.add_comment, name='add_comment'),
 ]

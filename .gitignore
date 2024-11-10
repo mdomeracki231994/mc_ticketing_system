@@ -1,1 +1,33 @@
 .idea
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore all __pycache__ directories recursively
+**/__pycache__/
+
+# Ignore all .pyc files in migrations directories and subdirectories
+**/migrations/**/*.pyc
+
+
+# Django migrations
+*/migrations/*
+!*/migrations/__init__.py
+
+# Database files
+db.sqlite3
+
+# Static file cache (e.g., for Django Compressor or WhiteNoise)
+static/CACHE/
+
+# Compiled CSS files (if generated)
+static/src/output.css
+*.css.map
+
+# Ignore CSV data files
+csv_data/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db

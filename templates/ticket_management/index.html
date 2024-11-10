@@ -15,6 +15,7 @@
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
+                                    <th scope="col" class="px-4 py-3">Ticket Number</th>
                                     <th scope="col" class="px-4 py-3">Assigned User</th>
                                     <th scope="col" class="px-4 py-3">Ticket Title</th>
                                     <th scope="col" class="px-4 py-3">Status</th>
@@ -32,7 +33,7 @@
                                 {% for ticket in tickets %}
                                     <tr onclick="window.location.href='{% url 'ticket_details' ticket.id %}'"
                                         class="cursor-grab hover:cursor-grabbing hover:bg-gray-100 dark:hover:bg-gray-700">
-
+                                        <td class="px-4 py-3">{{ ticket.ticket_number }}</td>
                                         <td class="px-4 py-3">
                                             {% if ticket.assigned_to %}
                                                 {{ ticket.assigned_to.first_name }} {{ ticket.assigned_to.last_name }}

@@ -7,7 +7,7 @@
                 <!-- Column -->
                 <div class="sm:col-span-2">
                     <h2 class="flex items-center mb-4 text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white sm:mb-5">
-                        The 4th Digital Transformation
+                        {{ ticket.title }}
                     </h2>
                     <dl class="flex items-center mb-4 space-x-4 sm:mb-5">
                         <div>
@@ -19,31 +19,51 @@
                                           d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                                           clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="font-semibold">26th of November, 2022</span>
+                                <span class="font-semibold">Created At: {{ ticket.created_at|date:"F j, Y, g:i a" }}</span>
                             </dd>
                         </div>
                         <div>
-                            <dt class="sr-only">Location</dt>
+                            <dt class="sr-only">Date</dt>
                             <dd class="flex items-center text-gray-900 dark:text-white">
                                 <svg class="w-4 h-4 mr-1.5 text-gray-400 dark:text-gray-500" aria-hidden="true"
                                      fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
-                                          d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                                           clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="font-semibold">California, USA</span>
+                                <span class="font-semibold">Due Date: {{ ticket.created_at|date:"F j, Y, g:i a" }}</span>
                             </dd>
                         </div>
                     </dl>
                     <dl>
                         <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Details:</dt>
                         <dd class="font-light text-gray-500 dark:text-gray-400">
-                            USA enterprises and governments have committed to a technology-driven future, making USA one
-                            of the fastest-growing markets for digital technologies. This has also increased the
-                            exposure to the risk of cyber-attacks as businesses continue to progress toward being more
-                            digital in areas such as the workplace, which requires more security measures.
+                            {{ ticket.description }}
                         </dd>
                     </dl>
+                    <div>
+                        <div id="comments-list" class="space-y-4 mt-4">
+                            {% for comment in ticket.comments.all %}
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <p class="text-gray-700 dark:text-gray-200">{{ comment.user.first_name }} {{ comment.user.last_name }}</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ comment.created_at|date:"F j, Y, g:i a" }}</p>
+                                    <p class="mt-2 text-gray-900 dark:text-gray-300">{{ comment.comment }}</p>
+                                </div>
+                            {% empty %}
+                                <p class="p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">No comments yet.</p>
+                            {% endfor %}
+                        </div>
+                        <form action="{% url 'add_comment' ticket.id %}" method="POST" class="mt-6">
+                            {% csrf_token %}
+                            <textarea name="comment_text" rows="3"
+                                      class="w-full p-2 rounded-lg border dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                                      placeholder="Add a comment..." required></textarea>
+                            <button type="submit"
+                                    class="mt-2 px-5 py-2 bg-primary-700 text-white rounded-lg hover:bg-primary-800">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <!-- Column -->
                 <dl class="p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
@@ -79,11 +99,7 @@
                               d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
                               clip-rule="evenodd"></path>
                     </svg>
-                    Edit
-                </button>
-                <button type="button"
-                        class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                    Preview
+                    <a href="{% url 'update_ticket' ticket.id %}">Update</a>
                 </button>
                 <button type="button"
                         class="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
