@@ -50,16 +50,30 @@ class AppUserManager(BaseUserManager):
         return user
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
+    SITE_OWNER = 1
+    SITE_ADMIN = 2
+    MANAGER = 3
+    BASE_EMPLOYEE = 4
+    FULL_EMPLOYEE = 5
+
+    ROLE_CHOICES = (
+        (SITE_OWNER, "Site Owner"),
+        (SITE_ADMIN, "Site Admin"),
+        (MANAGER, "Manager"),
+        (BASE_EMPLOYEE, "Base Employee"),
+        (FULL_EMPLOYEE, "Full Employee"),
+    )
     user_id = models.AutoField(primary_key=True)
     email = models.EmailField(max_length=50, unique=True)
     username = models.CharField(max_length=50, null=True, blank=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     phone_number = models.CharField(max_length=55, null=True, blank=True)
-    is_site_owner = models.BooleanField(default=False)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=SITE_ADMIN)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     org = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
+
 
 
     USERNAME_FIELD = 'email'

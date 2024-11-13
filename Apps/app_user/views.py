@@ -16,9 +16,10 @@ def signup(request):
             password=password,
             is_active=True,
             is_staff=True,
-            is_site_owner=True,
             org_id=org.id,
         )
+        new_user.role = AppUser.SITE_OWNER
+        new_user.user_permissions.all()
         new_user.save()
         user = authenticate(request, email=email, password=password)
         if user:
@@ -43,3 +44,9 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+def can_delete(check_user: AppUser):
+    if check_user.FULL_EMPLOYEE or check_user.MANAGER or check_user.SITE_OWNER or check_user.SITE_ADMIN:
+        return True
+    return False

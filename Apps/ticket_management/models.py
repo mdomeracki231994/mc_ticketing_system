@@ -2,6 +2,7 @@ from django.db import models, transaction
 from django.contrib.auth import get_user_model
 
 from Apps.org_management.models import Organization
+from Apps.project_management.models import Project
 
 User = get_user_model()
 
@@ -31,6 +32,7 @@ class Ticket(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_tickets')
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                     related_name='assigned_tickets')
