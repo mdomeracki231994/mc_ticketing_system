@@ -9,12 +9,16 @@ def signup(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         org_name = request.POST['org_name']
         org = Organization.objects.create(name=org_name)
         new_user = AppUser.objects.create_user(
             email=email,
             password=password,
             is_active=True,
+            first_name=first_name,
+            last_name=last_name,
             is_staff=True,
             org_id=org.id,
         )

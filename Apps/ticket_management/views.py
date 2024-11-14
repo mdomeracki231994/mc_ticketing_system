@@ -49,7 +49,7 @@ def create_ticket(request):
             org=org,
         )
         new_ticket.save()
-        return redirect('home')
+        return redirect('projects_index')
 
     users_org_id = request.user.org_id
     org = Organization.objects.get(id=users_org_id)

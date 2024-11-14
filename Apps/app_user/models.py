@@ -15,7 +15,6 @@ class AppUserManager(BaseUserManager):
             last_name=None,
             is_active=False,
             is_staff=False,
-            is_site_owner=False,
             org_id = None,
     ):
         if not email:
@@ -30,7 +29,6 @@ class AppUserManager(BaseUserManager):
             last_name=last_name,
             is_active=is_active,
             is_staff=is_staff,
-            is_site_owner=is_site_owner,
             org_id=org_id,
         )
         user.set_password(password)
