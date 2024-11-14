@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from Apps.app_user.models import AppUser
 from Apps.org_management.models import Organization
+from Apps.project_management.models import Project
 from Apps.ticket_management.models import Ticket, TicketComment
 
 user = get_user_model()
@@ -13,10 +14,12 @@ user = get_user_model()
 
 @login_required(login_url='login')
 def home(request):
+    project_id = request.user.current_active_project
+    project = Project.objects.get(id=project_id)
     tickets = Ticket.objects.filter(
         mark_deleted=False,
         org=request.user.org_id,
-        project=request.user.current_active_project,
+        project=project,
     )
     total_ticket_count = tickets.count()
     context = {
@@ -31,18 +34,20 @@ def create_ticket(request):
     if request.method == 'POST':
         title = request.POST['name']
         description = request.POST['description']
-        status = request.POST['status']
         priority = request.POST['priority']
         created_by = request.user
         assigned_user_id = request.POST['assigned_user']
         assigned_to = get_object_or_404(AppUser, pk=assigned_user_id)
         users_org_id = request.user.org_id
         org = Organization.objects.get(id=users_org_id)
+        project_id = request.user.current_active_project
+        project = Project.objects.get(id=project_id)
+
 
         new_ticket = Ticket.objects.create(
             title=title,
             description=description,
-            status=status,
+            project=project,
             priority=priority,
             created_by=created_by,
             assigned_to=assigned_to,
@@ -67,7 +72,10 @@ def create_ticket(request):
 
 @login_required
 def view_my_tickets(request):
+    project_id = request.user.current_active_project
+    project = Project.objects.get(id=project_id)
     tickets = Ticket.objects.filter(
+        project=project,
         assigned_to=request.user
     )
     total_ticket_count = tickets.count()
@@ -170,7 +178,10 @@ def all_closed_tickets(request: WSGIRequest):
 
 @login_required
 def all_deleted_tickets(request):
+    project_id = request.user.current_active_project
+    project = Project.objects.get(id=project_id)
     tickets = Ticket.objects.filter(
+        project=project,
         mark_deleted=True
     )
     total_ticket_count = tickets.count()
