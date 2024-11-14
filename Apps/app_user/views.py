@@ -39,7 +39,7 @@ def login_view(request):
         user = authenticate(request, email=email, password=password)
         if user:
             login(request, user)
-            return redirect('home')
+            return redirect('projects_index')
         else:
             print("Error")
     return render(request, 'app_user/login.html')
