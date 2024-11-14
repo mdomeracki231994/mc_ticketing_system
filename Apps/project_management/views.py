@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from Apps.project_management.models import Project
 
 
-@login_required
+@login_required(login_url='login')
 def index(request):
     projects = Project.objects.filter(
         organization=request.user.org_id,
