@@ -128,8 +128,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 COMPRESS_ROOT = BASE_DIR / 'static'
-
+COMPRESS_URL = STATIC_URL
 COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
@@ -143,3 +146,4 @@ STATICFILES_FINDERS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 django_heroku.settings(locals())
+
