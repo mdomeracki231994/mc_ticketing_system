@@ -63,6 +63,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         (BASE_EMPLOYEE, "Base Employee"),
         (FULL_EMPLOYEE, "Full Employee"),
     )
+    current_active_project = models.PositiveSmallIntegerField(default=1)
     user_id = models.AutoField(primary_key=True)
     email = models.EmailField(max_length=50, unique=True)
     username = models.CharField(max_length=50, null=True, blank=True)

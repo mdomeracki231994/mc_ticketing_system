@@ -11,11 +11,12 @@ from Apps.ticket_management.models import Ticket, TicketComment
 user = get_user_model()
 
 
-@login_required(login_url='login')  # TODO Figure out how to record global state for Current Active project.
+@login_required(login_url='login')
 def home(request):
     tickets = Ticket.objects.filter(
         mark_deleted=False,
         org=request.user.org_id,
+        project=request.user.current_active_project,
     )
     total_ticket_count = tickets.count()
     context = {

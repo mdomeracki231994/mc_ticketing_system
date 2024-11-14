@@ -18,6 +18,9 @@ def index(request):
 
 @login_required
 def project_detail(request, project_id):
+    user = request.user
+    user.current_active_project = project_id
+    user.save()
     project = Project.objects.get(id=project_id)
     context = {
         'project': project,
