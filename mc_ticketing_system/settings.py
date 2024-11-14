@@ -125,14 +125,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 COMPRESS_ROOT = BASE_DIR / 'static/src'
 COMPRESS_URL = STATIC_URL
 COMPRESS_ENABLED = True
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static/src",
+    BASE_DIR / "static",
 ]
 
 
