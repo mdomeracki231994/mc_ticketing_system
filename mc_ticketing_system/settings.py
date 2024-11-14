@@ -125,7 +125,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 COMPRESS_ROOT = BASE_DIR / 'static'
 COMPRESS_URL = STATIC_URL
