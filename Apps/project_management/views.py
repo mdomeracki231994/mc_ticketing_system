@@ -51,3 +51,5 @@ def update_project(request):
 @login_required
 def delete_project(request):
     pass
+
+

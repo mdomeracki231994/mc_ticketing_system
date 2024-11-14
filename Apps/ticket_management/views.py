@@ -43,7 +43,6 @@ def create_ticket(request):
         project_id = request.user.current_active_project
         project = Project.objects.get(id=project_id)
 
-
         new_ticket = Ticket.objects.create(
             title=title,
             description=description,
@@ -167,7 +166,9 @@ def recover_ticket(request, ticket_id):
 
 @login_required
 def all_closed_tickets(request: WSGIRequest):
-    tickets = Ticket.objects.filter(completed_at__isnull=False)
+    project_id = request.user.current_active_project
+    project = Project.objects.get(id=project_id)
+    tickets = Ticket.objects.filter(completed_at__isnull=False, project=project)
     total_ticket_count = tickets.count()
     context = {
         'tickets': tickets,
