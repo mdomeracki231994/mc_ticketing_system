@@ -22,7 +22,6 @@ db.sqlite3
 static/CACHE/
 
 # Compiled CSS files (if generated)
-static/src/output.css
 *.css.map
 
 # Ignore CSV data files
