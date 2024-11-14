@@ -28,7 +28,7 @@ def signup(request):
         user = authenticate(request, email=email, password=password)
         if user:
             login(request, user)
-            return redirect('home')
+            return redirect('projects_index')
     return render(request, 'app_user/signup.html')
 
 
