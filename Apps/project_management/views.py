@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from Apps.project_management.models import Project
 
@@ -29,7 +29,18 @@ def project_detail(request, project_id):
 
 @login_required
 def create_project(request):
-    pass
+    if request.method == 'POST':
+        name = request.POST['name']
+        description = request.POST['description']
+
+        organization = request.user.org
+        project = Project.objects.create(
+            organization=organization,
+            name=name,
+            description=description,
+        )
+        return redirect('project_detail', project.id)
+    return render(request, 'project_management/create_project.html')
 
 
 @login_required
