@@ -3,7 +3,7 @@ from django.urls import path
 from Apps.ticket_management import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('all_tickets/', views.home, name='home'),
     path('my_tickets/', views.view_my_tickets, name='my_tickets'),
     path('create_ticket/', views.create_ticket, name='create_ticket'),
 

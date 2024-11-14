@@ -5,14 +5,13 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from Apps.app_user.models import AppUser
-from Apps.app_user.views import can_delete
 from Apps.org_management.models import Organization
 from Apps.ticket_management.models import Ticket, TicketComment
 
 user = get_user_model()
 
 
-@login_required(login_url='login')
+@login_required(login_url='login')  # TODO Figure out how to record global state for Current Active project.
 def home(request):
     tickets = Ticket.objects.filter(
         mark_deleted=False,
