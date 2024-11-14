@@ -10,7 +10,7 @@ __pycache__/
 # Ignore all .pyc files in migrations directories and subdirectories
 **/migrations/**/*.pyc
 
-
+node_modules
 # Django migrations
 */migrations/*
 !*/migrations/__init__.py
