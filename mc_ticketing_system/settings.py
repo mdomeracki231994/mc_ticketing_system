@@ -130,7 +130,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 COMPRESS_ROOT = BASE_DIR / 'static'
 COMPRESS_URL = STATIC_URL
 COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
 
 STATICFILES_DIRS = [
     BASE_DIR / "static/src",
